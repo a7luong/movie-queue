@@ -1,0 +1,24 @@
+﻿@model MovieQueue.Models.Movies
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>Details</h2>
+
+<div style="width:25%;display:inline-block">
+    <img style="max-width:100%" src=' @("https://image.tmdb.org/t/p/w300_and_h450_bestv2/" + Model.poster_path) ' />
+</div><div style="width:75%;display:inline-block">
+    <span style="font-weight:bold;font-size:2em;">
+        @Html.DisplayFor(model => model.title)
+    @Html.DisplayFor(model => model.release_date.Year)
+</span>
+<br>
+<br>
+@Html.DisplayFor(model => model.description)
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.id }) |
+    @Html.ActionLink("Delete", "Delete", new { id = Model.id }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>
