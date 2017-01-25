@@ -4,25 +4,62 @@
     ViewBag.Title = "Index";
 }
 
-<h2>Showing results for</h2>
+@Html.Partial("Search")
 
-<p>
-    @Html.ActionLink("Create New", "Create")
-</p>
-
-<form action="Lookup" class="form-group" method="get">
-    <label for="usr">Search</label>
-    <input type="text" name="lookupName" class="form-control">
-    <button class="btn btn-default" type="submit">Search</button>
-</form>
+<h2>Showing results for "@Model.queryString"</h2>
 
 <br>
 
 @foreach (var results in Model.results)
 {
-    <a href='@Url.Action("LookupDetails/"+results.id,"Movies")'>
-        <img style="display:inline-block;border:solid #CCCCCC 1px;max-width:200px;" src=' @("https://image.tmdb.org/t/p/w300_and_h450_bestv2/" + results.poster_path) ' />
+    <a href='@Url.Action("LookupDetails/" + results.id, "Movies")'>
+        <img class="hover-glow" style="display:inline-block;border:solid #CCCCCC 0px;min-width:200px;width:19%;padding-right:10px;padding-bottom:10px;" src=' @("https://image.tmdb.org/t/p/w300_and_h450_bestv2/" + results.poster_path) ' />
     </a>
 }
 
+<br>
+
+<div class="text-center">
+<ul class="pagination">
+    @{
+        var start = 1; var end = Model.totalPages;
+
+        if (Model.totalPages > 1) { 
+
+            if (Model.currentPage - 2 > 1)
+            {
+                start = Model.currentPage - 2;
+            }
+            if (Model.currentPage + 2 < end)
+            {
+                end = Model.currentPage + 2;
+            }
+
+            if (start != 1)
+            {
+                <li @{if (1 == Model.currentPage) { <text> class="active" </text>  } }><a href='@Url.Action("Lookup", "Movies", new { lookupName = Model.queryString} )'>1</a></li>
+                <li><a style="background:none;">...</a></li>
+            }
+
+            for (int i = start; i <= end; i++)
+            {
+                <li @{if (i == Model.currentPage) { <text> class="active" </text> } }><a href='@Url.Action("Lookup", "Movies", new { lookupName = Model.queryString, page = i} )'> @(i) </a></li>
+            }
+
+            if (end != Model.totalPages)
+            {
+                <li><a style="background:none;">...</a></li>
+                <li @{if (Model.totalPages == Model.currentPage) { <text> class="active" </text>    } }><a href='@Url.Action("Lookup", "Movies", new { lookupName = Model.queryString, page= Model.totalPages } )'> @(Model.totalPages) </a></li>
+            }
+        }
+    }
+</ul>
+</div>
+
+<style>
+    .hover-glow:hover {
+        filter: brightness(105%);
+        opacity: .8;
+    }
+</style>
 

@@ -8,117 +8,33 @@
 
 <div style="width:25%;display:inline-block">
     <img style="max-width:100%" src=' @("https://image.tmdb.org/t/p/w300_and_h450_bestv2/" + Model.poster_path) ' />
-</div><div style="width:75%;display:inline-block">
-    <span style="font-weight:bold;font-size:2em;">@Html.DisplayFor(model => model.title)
-    @Html.DisplayFor(model => model.release_date.Year)</span>
-    <br>
-    <br>
-    @Html.DisplayFor(model => model.description)
+</div><div style="text-align:left;padding-left:20px;padding-right:20px;vertical-align:top;width:75%;display:inline-block">
+    <span style="font-size:2em;">
+        <span style="font-weight:bold;">@Html.DisplayFor(model => model.title)</span>
+        <span style="color:#888888">(@Html.DisplayFor(model => model.release_date.Year))</span>
+
+    </span>
+    <span style="display:block;color:#888888">Runtime:@Html.DisplayFor(model => model.runtime) minutes</span>
+
+    @{
+        for (int i = 0; i < 4; i++)
+        {
+            <span style="font-size:2em;color:steelblue">★</span>
+        }
+    }
+
+    <br><br>
+
+    @Html.Partial("CreateButton")
+
+    <br><br><br><br>
+    <h2 style="font-size:1.4em;font-weight:bold">Overview</h2><br>
+    <span style="font-size:1.15em;">@Html.DisplayFor(model => model.description)</span>      
 </div>
 
 
+   
 
-
-@using (Html.BeginForm())
-{
-    @Html.AntiForgeryToken()
-
-    <div class="form-horizontal">
-        <div style="display:none;">
-        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-        <div class="form-group">
-            @Html.LabelFor(model => model.movieDB_id, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.movieDB_id, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.movieDB_id, "", new { @class = "text-danger" })
-            </div>
-        </div>
-
-        <div class="form-group">
-            @Html.LabelFor(model => model.imdb_id, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.imdb_id, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.imdb_id, "", new { @class = "text-danger" })
-            </div>
-        </div>
-
-        <div class="form-group">
-            @Html.LabelFor(model => model.runtime, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.runtime, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.runtime, "", new { @class = "text-danger" })
-            </div>
-        </div>
-
-        <div class="form-group">
-            @Html.LabelFor(model => model.title, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.title, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.title, "", new { @class = "text-danger" })
-            </div>
-        </div>
-
-        <div class="form-group">
-            @Html.LabelFor(model => model.description, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.description, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.description, "", new { @class = "text-danger" })
-            </div>
-        </div>
-
-        <div class="form-group">
-            @Html.LabelFor(model => model.poster_path, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.poster_path, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.poster_path, "", new { @class = "text-danger" })
-            </div>
-        </div>
-
-        <div class="form-group">
-            @Html.LabelFor(model => model.backdrop_path, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.backdrop_path, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.backdrop_path, "", new { @class = "text-danger" })
-            </div>
-        </div>
-
-        <div class="form-group">
-            @Html.LabelFor(model => model.vote_average, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.vote_average, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.vote_average, "", new { @class = "text-danger" })
-            </div>
-        </div>
-
-        <div class="form-group">
-            @Html.LabelFor(model => model.release_date, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.release_date, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.release_date, "", new { @class = "text-danger" })
-            </div>
-        </div>
-        </div>
-
-        @{ if (!(bool)ViewData["alreadyExists"])
-            {
-                <div class="form-group">
-                    <div class="col-md-offset-2 col-md-10">
-                        <input type="submit" value="Add to queue" class="btn btn-default" />
-                    </div>
-                </div>
-            }
-            else
-            {
-                <div class="form-group">
-                    <div class="col-md-offset-2 col-md-10">
-                        <input value="Already in queue" class="btn btn-default .disabled" />
-                    </div>
-                </div>
-            }
-        }
-    </div>
-}
-
-@section Scripts {
-    @Scripts.Render("~/bundles/jqueryval")
-}
+    @section Scripts {
+        @Scripts.Render("~/bundles/jqueryval")
+    }

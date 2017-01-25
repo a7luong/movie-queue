@@ -11,63 +11,22 @@ using MovieQueue.Models;
 namespace MovieQueue.Helpers
 {
 
-
     public class MovieObject
     {
         public bool adult { get; set; }
-        public string backdrop_path { get; set; }
-        public object belongs_to_collection { get; set; }
-        public int budget { get; set; }
-        public Genre[] genres { get; set; }
-        public string homepage { get; set; }
+        public string backdrop_path { get; set; }       
         public int id { get; set; }
         public string imdb_id { get; set; }
-        public string original_language { get; set; }
-        public string original_title { get; set; }
         public string overview { get; set; }
         public float popularity { get; set; }
         public string poster_path { get; set; }
-        public Production_Companies[] production_companies { get; set; }
-        public Production_Countries[] production_countries { get; set; }
         public string release_date { get; set; }
-        public int revenue { get; set; }
         public int runtime { get; set; }
-        public Spoken_Languages[] spoken_languages { get; set; }
-        public string status { get; set; }
-        public string tagline { get; set; }
         public string title { get; set; }
-        public bool video { get; set; }
         public float vote_average { get; set; }
-        public int vote_count { get; set; }
     }
 
-    public class Genre
-    {
-        public int id { get; set; }
-        public string name { get; set; }
-    }
-
-    public class Production_Companies
-    {
-        public string name { get; set; }
-        public int id { get; set; }
-    }
-
-    public class Production_Countries
-    {
-        public string iso_3166_1 { get; set; }
-        public string name { get; set; }
-    }
-
-    public class Spoken_Languages
-    {
-        public string iso_639_1 { get; set; }
-        public string name { get; set; }
-    }
-
-
-
-    public class DataObject
+    public class MovieSearchResults
     {
         public int page { get; set; }
         public Result[] results { get; set; }
@@ -119,9 +78,9 @@ namespace MovieQueue.Helpers
 
         }
 
-        public Result[] fetchFromAPI(string lookupName)
+        public MovieSearchResults fetchFromAPI(string lookupName, int page = 1)
         {
-            string urlParameters = "/3/search/movie?api_key=54bbd953ac47c9ba8bb9351af3fce31a&query=" + lookupName;
+            string urlParameters = "/3/search/movie?api_key=54bbd953ac47c9ba8bb9351af3fce31a&query=" + lookupName + "&page=" + page;
 
             HttpClient client = new HttpClient();
             client.BaseAddress = new Uri(URL);
@@ -135,8 +94,8 @@ namespace MovieQueue.Helpers
             if (response.IsSuccessStatusCode)
             {
                 // Parse the response body. Blocking!
-                var dataObjects = response.Content.ReadAsAsync<DataObject>().Result;
-                var results_pre_trim = new List<Result>(dataObjects.results);
+                var searchResult = response.Content.ReadAsAsync<MovieSearchResults>().Result;
+                var results_pre_trim = new List<Result>(searchResult.results);
                 var results_post_trim = new List<Result>();
 
                 for (int i = 0; i < results_pre_trim.Count; i++)
@@ -146,8 +105,8 @@ namespace MovieQueue.Helpers
                         results_post_trim.Add(results_pre_trim[i]);
                     }
                 }
-
-                return results_post_trim.ToArray();
+                searchResult.results = results_post_trim.ToArray();
+                return searchResult;
             }
             else
             {

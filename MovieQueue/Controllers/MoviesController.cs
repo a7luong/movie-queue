@@ -45,14 +45,15 @@ namespace MovieQueue.Controllers
 
         // GET: Movies/Lookup/?lookupName={name}
         //[Route("movies/lookUp/{lookupName}")]
-        public ActionResult Lookup(string lookupName)
+        public ActionResult Lookup(string lookupName, int page = 1)
         {
             if (lookupName == null) {
                 return View("Search");
             }
 
             LookupMovies l = new LookupMovies();
-            LookupResults lookupResults = new LookupResults { results = l.fetchFromAPI(lookupName) };
+            MovieSearchResults m = l.fetchFromAPI(lookupName, page);
+            LookupResults lookupResults = new LookupResults { results = m.results, queryString = lookupName, currentPage = m.page, totalPages = m.total_pages  };
 
             if (lookupResults.results == null)
             {
@@ -74,8 +75,6 @@ namespace MovieQueue.Controllers
             ViewData["alreadyExists"] = alreadyExists;
             return View(movie);
         }
-
-
 
         // POST: Movies/LookupDetails
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 

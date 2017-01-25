@@ -1,53 +1,29 @@
 ﻿@model IEnumerable<MovieQueue.Models.Movies>
 
 @{
-    ViewBag.Title = "Index";
+    ViewBag.Title = "My Movies";
 }
 
-<h2>Index</h2>
+<h2>My Movies</h2>
 
 <p>
     @Html.ActionLink("Create New", "Create")
 </p>
-<table class="table">
-    <tr>
-        <th>
-            @Html.DisplayNameFor(model => model.movieDB_id)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.runtime)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.title)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.description)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.poster_path)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.backdrop_path)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.vote_average)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.release_date)
-        </th>
-        <th></th>
-    </tr>
-</table>
 
 @foreach (var item in Model)
 {
    
         <a href='@Url.Action("Details/"+item.id,"Movies")'>
-        <img style="display:inline-block;border:solid #CCCCCC 1px;min-width:200px;width:19.5%;" src=' @("https://image.tmdb.org/t/p/w300_and_h450_bestv2/" + item.poster_path) ' />
+        <img class="hover-glow" style="display:inline-block;border:solid #CCCCCC 0px;min-width:200px;width:19.5%;padding-right:10px;padding-bottom:10px;" src=' @("https://image.tmdb.org/t/p/w300_and_h450_bestv2/" + item.poster_path) ' />
         </a>
 
-    
-    
 }
+
+<style>
+    .hover-glow:hover {
+      filter:brightness(118%);
+      opacity:.85;
+    }
+</style>
 
 
